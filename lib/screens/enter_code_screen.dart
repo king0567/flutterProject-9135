@@ -1,0 +1,134 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
+import 'package:movienightapp/utils/app_state.dart';
+import 'package:movienightapp/utils/http_helper.dart';
+import 'package:movienightapp/screens/movie_selection_screen.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+class EnterCodeScreen extends StatefulWidget {
+  const EnterCodeScreen({super.key});
+
+  @override
+  State<EnterCodeScreen> createState() => _EnterCodeScreenState();
+}
+
+class _EnterCodeScreenState extends State<EnterCodeScreen> {
+  final GlobalKey<FormState> _formStateKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Enter Code',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.blue,
+        ),
+        body: Center(
+          child: Form(
+            key: _formStateKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(
+                      labelText: 'Enter The Code From Your Friend',
+                      labelStyle: Theme.of(context).textTheme.bodyLarge,
+                      icon: const Icon(Icons.code),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 20.0, horizontal: 0.0)),
+                  keyboardType: TextInputType.number,
+                  textInputAction: TextInputAction.done,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineLarge!
+                      .copyWith(letterSpacing: 20.0),
+                  textAlign: TextAlign.center,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(4)
+                  ],
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your code!';
+                    }
+                    if (value.length != 4) {
+                      return 'The code must be 4 digits';
+                    }
+                    return null;
+                  },
+                  onSaved: (String? value) {
+                    print(value);
+                    _joinSession(value);
+                  },
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      if (_formStateKey.currentState!.validate()) {
+                        _formStateKey.currentState!.save();
+                      }
+                    },
+                    child: const Row(mainAxisSize: MainAxisSize.min, children: [
+                      Icon(Icons.send),
+                      SizedBox(width: 8),
+                      Text("Begin")
+                    ]))
+              ],
+            ),
+          ),
+        ));
+  }
+
+  Future<void> _joinSession(String? code) async {
+    String? deviceId = Provider.of<AppState>(context, listen: false).deviceId;
+    if (kDebugMode) {
+      print('Device id from Enter Code Screen: $deviceId');
+    }
+    //call api
+    final response = await HttpHelper.joinSession(deviceId, code);
+    if (response["success"] == true) {
+      await sharedPreferencesSave(response['body']['data']['session_id']);
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => MovieSelectionScreen()));
+    } else {
+      showAlert(context, "Error",
+          response["message"] ?? "Invalid code. Please try again.");
+    }
+  }
+
+  Future<void> sharedPreferencesSave(String sessionId) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString("sessionId", sessionId);
+  }
+}
+
+void showAlert(BuildContext context, String title, String message) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("OK"),
+          ),
+        ],
+      );
+    },
+  );
+}

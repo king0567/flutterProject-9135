@@ -18,6 +18,7 @@ class ShareCodeScreen extends StatefulWidget {
 
 class _ShareCodeScreenState extends State<ShareCodeScreen> {
   String code = "Unset";
+  bool dataStored = false;
 
   @override
   void initState() {
@@ -30,14 +31,48 @@ class _ShareCodeScreenState extends State<ShareCodeScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            'Share Code',
+            'Start Session',
             style: TextStyle(color: Colors.white),
           ),
           backgroundColor: Colors.blue,
         ),
         body: Center(
-          child: Column(
-            children: [Text('Code: $code')],
+          child: Padding(
+            padding: const EdgeInsets.only(
+                top: 80.0, bottom: 200.0, left: 8.0, right: 8.0),
+            child: Column(
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      'Code: $code',
+                      style: TextStyle(
+                          fontSize: 50.0, fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      'Share This Code With A Friend',
+                      style: TextStyle(fontSize: 20.0),
+                    )
+                  ],
+                ),
+                Spacer(),
+                ElevatedButton(
+                    onPressed: () {
+                      if (dataStored) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MovieSelectionScreen(),
+                            ));
+                      }
+                    },
+                    child: const Row(mainAxisSize: MainAxisSize.min, children: [
+                      Icon(Icons.start),
+                      SizedBox(width: 8),
+                      Text("Begin")
+                    ]))
+              ],
+            ),
           ),
         ));
   }
@@ -59,7 +94,10 @@ class _ShareCodeScreenState extends State<ShareCodeScreen> {
       });
 
       await sharedPreferencesSave(response['body']['data']['session_id']);
-    } else {}
+      setState(() {
+        dataStored = true;
+      });
+    }
   }
 
   Future<void> sharedPreferencesSave(String sessionId) async {

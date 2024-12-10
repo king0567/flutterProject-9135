@@ -30,7 +30,7 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            'Enter Code',
+            'Join Session',
             style: TextStyle(color: Colors.white),
           ),
           backgroundColor: Colors.blue,
@@ -38,52 +38,59 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
         body: Center(
           child: Form(
             key: _formStateKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  decoration: InputDecoration(
-                      labelText: 'Enter The Code From Your Friend',
-                      labelStyle: Theme.of(context).textTheme.bodyLarge,
-                      icon: const Icon(Icons.code),
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 20.0, horizontal: 0.0)),
-                  keyboardType: TextInputType.number,
-                  textInputAction: TextInputAction.done,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineLarge!
-                      .copyWith(letterSpacing: 20.0),
-                  textAlign: TextAlign.center,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(4)
-                  ],
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your code!';
-                    }
-                    if (value.length != 4) {
-                      return 'The code must be 4 digits';
-                    }
-                    return null;
-                  },
-                  onSaved: (String? value) {
-                    print(value);
-                    _joinSession(value);
-                  },
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      if (_formStateKey.currentState!.validate()) {
-                        _formStateKey.currentState!.save();
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  top: 80.0, bottom: 200.0, left: 8.0, right: 8.0),
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: InputDecoration(
+                        labelText: 'Enter The Code From Your Friend',
+                        labelStyle: Theme.of(context).textTheme.bodyLarge,
+                        icon: const Icon(Icons.code),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 20.0, horizontal: 0.0)),
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.done,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineLarge!
+                        .copyWith(letterSpacing: 20.0),
+                    textAlign: TextAlign.center,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(4)
+                    ],
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your code!';
                       }
+                      if (value.length != 4) {
+                        return 'The code must be 4 digits';
+                      }
+                      return null;
                     },
-                    child: const Row(mainAxisSize: MainAxisSize.min, children: [
-                      Icon(Icons.send),
-                      SizedBox(width: 8),
-                      Text("Begin")
-                    ]))
-              ],
+                    onSaved: (String? value) {
+                      print(value);
+                      _joinSession(value);
+                    },
+                  ),
+                  Spacer(),
+                  ElevatedButton(
+                      onPressed: () {
+                        if (_formStateKey.currentState!.validate()) {
+                          _formStateKey.currentState!.save();
+                        }
+                      },
+                      child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.start),
+                            SizedBox(width: 8),
+                            Text("Begin")
+                          ]))
+                ],
+              ),
             ),
           ),
         ));

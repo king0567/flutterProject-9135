@@ -54,7 +54,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       builder: (context) => EnterCodeScreen(),
                     ));
               },
-              child: Text('Enter Code'),
+              child: Text('Join Session'),
             )
           ],
         ),

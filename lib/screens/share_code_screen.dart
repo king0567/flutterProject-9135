@@ -18,6 +18,7 @@ class ShareCodeScreen extends StatefulWidget {
 
 class _ShareCodeScreenState extends State<ShareCodeScreen> {
   String code = "Unset";
+  bool fetchingData = false;
   bool dataStored = false;
 
   @override
@@ -56,6 +57,19 @@ class _ShareCodeScreenState extends State<ShareCodeScreen> {
                   ],
                 ),
                 Spacer(),
+                Visibility(
+                  visible: fetchingData,
+                  child: Center(
+                    child: Column(
+                      children: [
+                        const CircularProgressIndicator(),
+                        SizedBox(height: 20),
+                        Text("please wait while we create your session...")
+                      ],
+                    ),
+                  ),
+                ),
+                Spacer(),
                 ElevatedButton(
                     onPressed: () {
                       if (dataStored) {
@@ -83,7 +97,14 @@ class _ShareCodeScreenState extends State<ShareCodeScreen> {
       print('Device id from Share Code Screen: $deviceId');
     }
     //call api
+    setState(() {
+      fetchingData = true;
+    });
     final response = await HttpHelper.startSession(deviceId);
+    setState(() {
+      fetchingData = false;
+    });
+
     if (kDebugMode) {
       print(response['body']['data']['code']);
     }

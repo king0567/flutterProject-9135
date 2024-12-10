@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:http/http.dart' as http;
 
 class HttpHelper {
@@ -39,6 +40,23 @@ class HttpHelper {
         'success': false,
         'message': errorDetails['message'] ??
             'Invalid code. Please check and try again.',
+      };
+    } else {
+      return {
+        'success': false,
+        'message': 'Unexpected error. Please try again later.',
+      };
+    }
+  }
+
+  static voteMovie(String sessionId, int movieId, bool vote) async {
+    var response = await http.get(Uri.parse(
+        '$movieNightBaseUrl/vote-movie?session_id=$sessionId&movie_id=$movieId&vote=$vote'));
+
+    if (response.statusCode == 200) {
+      return {
+        'success': true,
+        'body': jsonDecode(response.body),
       };
     } else {
       return {

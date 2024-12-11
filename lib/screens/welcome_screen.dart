@@ -21,7 +21,6 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _initializeDeviceId();
   }
@@ -30,7 +29,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Movie Night'),
+        title: const Text('Movie Night'),
         backgroundColor: Colors.blue,
       ),
       body: Center(
@@ -41,20 +40,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ShareCodeScreen(),
+                      builder: (context) => const ShareCodeScreen(),
                     ));
               },
-              child: Text('Start Session'),
+              child: const Text('Start Session'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => EnterCodeScreen(),
+                      builder: (context) => const EnterCodeScreen(),
                     ));
               },
-              child: Text('Join Session'),
+              child: const Text('Join Session'),
             )
           ],
         ),
@@ -64,7 +63,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   Future<void> _initializeDeviceId() async {
     String deviceId = await _fetchDeviceId();
-    Provider.of<AppState>(context, listen: false).setDeviceId(deviceId);
+    if (mounted) {
+      Provider.of<AppState>(context, listen: false).setDeviceId(deviceId);
+    }
   }
 
   Future<String> _fetchDeviceId() async {

@@ -1,14 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/services.dart';
 import 'package:movienightapp/utils/app_state.dart';
 import 'package:movienightapp/utils/http_helper.dart';
+import 'package:movienightapp/screens/welcome_screen.dart';
 import 'package:movienightapp/screens/movie_selection_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class EnterCodeScreen extends StatefulWidget {
   const EnterCodeScreen({super.key});
@@ -29,7 +27,7 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             'Join Session',
             style: TextStyle(color: Colors.white),
           ),
@@ -71,11 +69,10 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
                       return null;
                     },
                     onSaved: (String? value) {
-                      print(value);
                       _joinSession(value);
                     },
                   ),
-                  Spacer(),
+                  const Spacer(),
                   ElevatedButton(
                       onPressed: () {
                         if (_formStateKey.currentState!.validate()) {
@@ -105,18 +102,24 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
     final response = await HttpHelper.joinSession(deviceId, code);
     if (response["success"] == true) {
       await sharedPreferencesSave(response['body']['data']['session_id']);
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => MovieSelectionScreen()));
+      if (mounted) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const MovieSelectionScreen()));
+      }
     } else {
-      showAlert(context, "Error",
-          response["message"] ?? "Invalid code. Please try again.");
+      if (mounted) {
+        showAlert(context, "Error",
+            response["message"] ?? "Invalid code. Please try again.");
+      }
     }
   }
 
   Future<void> sharedPreferencesSave(String sessionId) async {
-    final prefs = await SharedPreferences.getInstance();
+    final preferences = await SharedPreferences.getInstance();
 
-    await prefs.setString("sessionId", sessionId);
+    await preferences.setString("sessionId", sessionId);
   }
 }
 
@@ -128,9 +131,12 @@ void showAlert(BuildContext context, String title, String message) {
         title: Text(title),
         content: Text(message),
         actions: [
-          TextButton(
+          ElevatedButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const WelcomeScreen()));
             },
             child: const Text("OK"),
           ),

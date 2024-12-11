@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:movienightapp/utils/app_state.dart';
 import 'package:movienightapp/utils/http_helper.dart';
 import 'package:movienightapp/screens/movie_selection_screen.dart';
@@ -7,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class ShareCodeScreen extends StatefulWidget {
   const ShareCodeScreen({super.key});
@@ -31,7 +28,7 @@ class _ShareCodeScreenState extends State<ShareCodeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             'Start Session',
             style: TextStyle(color: Colors.white),
           ),
@@ -47,36 +44,37 @@ class _ShareCodeScreenState extends State<ShareCodeScreen> {
                   children: [
                     Text(
                       'Code: $code',
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 50.0, fontWeight: FontWeight.w600),
                     ),
-                    Text(
+                    const Text(
                       'Share This Code With A Friend',
                       style: TextStyle(fontSize: 20.0),
                     )
                   ],
                 ),
-                Spacer(),
+                const Spacer(),
                 Visibility(
                   visible: fetchingData,
-                  child: Center(
+                  child: const Center(
                     child: Column(
                       children: [
-                        const CircularProgressIndicator(),
+                        CircularProgressIndicator(),
                         SizedBox(height: 20),
                         Text("please wait while we create your session...")
                       ],
                     ),
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 ElevatedButton(
                     onPressed: () {
                       if (dataStored) {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MovieSelectionScreen(),
+                              builder: (context) =>
+                                  const MovieSelectionScreen(),
                             ));
                       }
                     },
@@ -122,8 +120,8 @@ class _ShareCodeScreenState extends State<ShareCodeScreen> {
   }
 
   Future<void> sharedPreferencesSave(String sessionId) async {
-    final prefs = await SharedPreferences.getInstance();
+    final preferences = await SharedPreferences.getInstance();
 
-    await prefs.setString("sessionId", sessionId);
+    await preferences.setString("sessionId", sessionId);
   }
 }

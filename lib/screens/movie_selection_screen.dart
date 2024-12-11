@@ -226,6 +226,7 @@ void showWinnerAlert(BuildContext context, String title, String posterPath) {
         title: const Text(
           "We Have a Winner!",
           textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -245,18 +246,34 @@ void showWinnerAlert(BuildContext context, String title, String posterPath) {
             ),
             Text(title,
                 style: const TextStyle(
-                    fontSize: 12.0, fontWeight: FontWeight.bold))
+                    fontSize: 20.0, fontWeight: FontWeight.bold))
           ],
         ),
         actions: [
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const WelcomeScreen()));
-            },
-            child: const Text("OK"),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const WelcomeScreen()));
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                minimumSize: const Size(200, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+              ),
+              child: const Text(
+                "OK",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
           ),
         ],
       );

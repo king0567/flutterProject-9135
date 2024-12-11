@@ -78,10 +78,28 @@ class _ShareCodeScreenState extends State<ShareCodeScreen> {
                             ));
                       }
                     },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      minimumSize: const Size(200, 100),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
                     child: const Row(mainAxisSize: MainAxisSize.min, children: [
-                      Icon(Icons.start),
+                      Icon(
+                        Icons.start,
+                        size: 35,
+                        color: Colors.white,
+                      ),
                       SizedBox(width: 8),
-                      Text("Begin")
+                      Text(
+                        "Begin",
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      )
                     ]))
               ],
             ),

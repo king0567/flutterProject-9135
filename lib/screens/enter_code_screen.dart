@@ -38,16 +38,37 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
             key: _formStateKey,
             child: Padding(
               padding: const EdgeInsets.only(
-                  top: 80.0, bottom: 200.0, left: 8.0, right: 8.0),
+                  top: 80.0, bottom: 200.0, left: 20.0, right: 20.0),
               child: Column(
                 children: [
                   TextFormField(
                     decoration: InputDecoration(
-                        labelText: 'Enter The Code From Your Friend',
-                        labelStyle: Theme.of(context).textTheme.bodyLarge,
-                        icon: const Icon(Icons.code),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 20.0, horizontal: 0.0)),
+                      labelText: 'Enter The Code From Your Friend',
+                      labelStyle: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(fontSize: 16),
+                      icon: const Icon(
+                        Icons.code,
+                        color: Colors.blue,
+                        size: 40,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 20.0, horizontal: 20.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.grey, width: 2.0),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.blue, width: 2.5),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.done,
                     style: Theme.of(context)
@@ -79,13 +100,30 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
                           _formStateKey.currentState!.save();
                         }
                       },
-                      child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.start),
-                            SizedBox(width: 8),
-                            Text("Begin")
-                          ]))
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        minimumSize: const Size(200, 100),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                      ),
+                      child:
+                          const Row(mainAxisSize: MainAxisSize.min, children: [
+                        Icon(
+                          Icons.start,
+                          size: 35,
+                          color: Colors.white,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          "Begin",
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        )
+                      ]))
                 ],
               ),
             ),
